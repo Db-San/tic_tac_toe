@@ -14,4 +14,4 @@ Try to place at first 3 Xs / 3 Os in a horizontal, vertical, or diagonal row bef
 # Run in Replit ⠕
 You can also run tic_tac_toe in Replit ⠕, a free online coding environment.
 
-[Try it now!](https://replit.com/@dsalvador/placeholder) (start here!)
+[Try it now!](https://replit.com/@dsalvador/tictactoe) (start here!)
