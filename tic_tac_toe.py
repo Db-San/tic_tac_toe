@@ -60,7 +60,7 @@ def display_board(menu_mode, player, turn, invalid_input):
             print("---------")    
 
 def fill_board(choice, player):
-    # fill board with player mark (X or O)
+    # fill the board with player marks (X or O)
     for index, row in enumerate(numbers):
         for index2, column in enumerate(row):
             if column == choice:
@@ -81,11 +81,11 @@ def tic_tac_toe():
     choice = ""
     turn = 1
 
-    # clear the terminal and display header
+    # clear the terminal and display the header
     clear()
     display_title_bar("human")
     
-    # keep playing until winner is found or user quits (Q)
+    # keep playing until a winner is found or the user quits (Q)
     while choice != "Q":
         # check for winners
         if match_finished:
@@ -100,8 +100,8 @@ def tic_tac_toe():
         # display playing board
         display_board("human", player, turn, invalid_input)
         
-        # get user choice: 1-9 or Q(uit) until game is not finished
-        #  if game is finished, game displays player winner or a draw
+        # get user choice: 1-9 or Q(uit) until the game is not finished
+        #  if the game is completed, the game displays the winner or a draw
         if match_finished is False:
             choice = get_player_choice()
         elif match_finished:
@@ -124,16 +124,16 @@ def tic_tac_toe():
             valid_inputs.remove(choice)
             invalid_input = False
 
-        # mark board with X or O with valid input
+        # mark the board with X or O with valid input
         fill_board(choice, player)
 
-        # flatten "numbers" array to check winner
+        # flatten the "numbers" array to check the winner
         flat_numbers = flatten_2d_array(numbers)
 
-        # check for player X or O win
+        # check for player X or O to win
         winner = check_winner(player, flat_numbers)
 
-        # check winner each turn
+        # check for winners each turn
         if winner:
             match_finished = True
 
@@ -161,7 +161,7 @@ def check_winner(player, numbers):
     backslash = []
     forward_slash = []
 
-    # fill arays with user input
+    # fill arrays with user input
     for index, number in enumerate(numbers):
         # fill rows
         if index <= 2:
@@ -220,7 +220,7 @@ def check_winner(player, numbers):
         hits = []
 
 # end of functions
-# prepare variables for main program
+# prepare variables for the main program
 numbers = [["1", "2", "3"],
            ["4", "5", "6"],
            ["7", "8", "9"]]
@@ -249,7 +249,7 @@ while choice != "Q":
     clear()
     display_title_bar("main menu")
 
-    # reset playing board
+    # reset the playing board
     numbers_copy = [["1", "2", "3"],
                     ["4", "5", "6"],
                     ["7", "8", "9"]]
