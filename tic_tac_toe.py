@@ -5,7 +5,7 @@ import os
 
 # functions 
 def display_title_bar(menu_mode):
-    # "menu_mode" variable to show current menu
+    # general purpose "menu_mode" variable to show menu
     print("\n-----------------------------------")
     print(f"--- tic tac toe --- [{menu_mode}]\t---")
     print("-----------------------------------")
@@ -60,7 +60,7 @@ def display_board(menu_mode, player, turn, invalid_input):
             print("---------")    
 
 def fill_board(choice, player):
-    # fill the board with player marks (X or O)
+    # fill board with player mark (X or O)
     for index, row in enumerate(numbers):
         for index2, column in enumerate(row):
             if column == choice:
@@ -81,13 +81,13 @@ def tic_tac_toe():
     choice = ""
     turn = 1
 
-    # clear the terminal and display the header
+    # clear the terminal and display header
     clear()
     display_title_bar("human")
     
-    # keep playing until a winner is found or the user quits (Q)
+    # keep playing until winner is found or user quits (Q)
     while choice != "Q":
-        # check for winners
+        # adjust turn counter to not overflow
         if match_finished:
             turn -= 1
 
@@ -99,24 +99,25 @@ def tic_tac_toe():
 
         # display playing board
         display_board("human", player, turn, invalid_input)
-        
-        # get user choice: 1-9 or Q(uit) until the game is not finished
-        #  if the game is completed, the game displays the winner or a draw
+
+        # get user choice: 1-9 or Q(uit) until game is finished
         if match_finished is False:
             choice = get_player_choice()
-        elif match_finished:
+        elif match_finished and winner:
+            # if game is finished, game displays the winner or a draw
             print(f"\nPlayer {winner} wins!")
             quit_message()
-            quit()
-        elif winner is False and len(valid_inputs) == 0:
-            print("It's a Draw!")
+            return "Q"
+        else:
+            print("\nIt's a Draw!")
             quit_message()
-            quit()
+            return "Q"
 
         # checks for invalid input (anything else that's not 1-9 or "Q")
         if choice not in valid_inputs:
             invalid_input = True
-            # don't increment turn counter for invalid inputs via continue
+
+            # don't increment turn counter for invalid inputs via "continue"
             continue
         else:
             # if valid, remove choice in valid inputs
@@ -124,17 +125,16 @@ def tic_tac_toe():
             valid_inputs.remove(choice)
             invalid_input = False
 
-        # mark the board with X or O with valid input
+        # mark board with X or O with valid input
         fill_board(choice, player)
 
-        # flatten the "numbers" array to check the winner
+        # flatten "numbers" array to check winner
         flat_numbers = flatten_2d_array(numbers)
 
-        # check for player X or O to win
+        # check for winners
         winner = check_winner(player, flat_numbers)
-
-        # check for winners each turn
-        if winner:
+        remaining_valid_inputs = len(valid_inputs)
+        if winner or remaining_valid_inputs == 0:
             match_finished = True
 
         # increment turn counter for valid inputs
@@ -185,42 +185,45 @@ def check_winner(player, numbers):
         if index in forward_slash_indices:
             forward_slash.append(number)
     
-    # check winner if X or O:
+    # find winner
     winner = ""
-    hits = []
+    marks = []
     winner_found = False
+
+    # count player "marks" in every possible line
     for index, player in enumerate(players):
         # check rows
-        hits.append(row1.count(player))
-        hits.append(row2.count(player))
-        hits.append(row3.count(player))
+        marks.append(row1.count(player))
+        marks.append(row2.count(player))
+        marks.append(row3.count(player))
         
         # check columns
-        hits.append(column1.count(player))
-        hits.append(column2.count(player))
-        hits.append(column3.count(player))
+        marks.append(column1.count(player))
+        marks.append(column2.count(player))
+        marks.append(column3.count(player))
         
         # check diagonals
-        hits.append(backslash.count(player))
-        hits.append(forward_slash.count(player))
+        marks.append(backslash.count(player))
+        marks.append(forward_slash.count(player))
 
-        for hit in hits:
-            if hit == 3:
+        # check if "player" has gotten 3 marks in a line
+        for mark in marks:
+            if mark == 3:
                 winner = player
                 winner_found = True
 
-        # return with a winner if found
+        # return player winner (X or O) if found
         #  else, it returns False
         if winner_found:
             return winner
         elif winner_found is False and player == "O":
             return False
         
-        # clear hits for every player
-        hits = []
+        # clear mark count for each player check
+        marks = []
 
 # end of functions
-# prepare variables for the main program
+# prepare variables for main program
 numbers = [["1", "2", "3"],
            ["4", "5", "6"],
            ["7", "8", "9"]]
@@ -249,7 +252,7 @@ while choice != "Q":
     clear()
     display_title_bar("main menu")
 
-    # reset the playing board
+    # reset playing board
     numbers_copy = [["1", "2", "3"],
                     ["4", "5", "6"],
                     ["7", "8", "9"]]
@@ -271,7 +274,7 @@ while choice != "Q":
 
     # respond to user choice
     if choice == "1":
-        tic_tac_toe()
+        choice = tic_tac_toe()
     elif choice == "Q":
         quit_message()
     else:
